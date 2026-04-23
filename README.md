@@ -17,17 +17,17 @@ scLGAE (Single-cell Low-rank Graph AutoEncoder) 是一个专门用于单细胞RN
 
 ### 核心模块
 
-1. **GAE 模块** (`model.py`)
+1. **GAE 模块** (`gae_model.py`)
    - GAT 编码器：多头注意力机制学习细胞嵌入
    - ZINB 解码器：零膨胀负二项分布建模基因表达
    - 支持 ZINB 损失和流形损失
 
-2. **LRR 模块** (`newtrain.py`)
+2. **LRR 模块** (`lrr_training.py`)
    - 低秩约束：促进全局结构学习
    - 块对角正则化：增强细胞类型分离
    - 自适应权重融合
 
-3. **数据预处理** (`data.py`)
+3. **数据预处理** (`data_preprocessing.py`)
    - 基因过滤和细胞质控
    - 归一化和对数变换
    - KNN 图构建
@@ -62,13 +62,13 @@ WORK_DIR = "path/to/scLGAE"
 
 2. **运行默认模型**
 ```python
-from main import default_model
+from experiments import default_model
 default_model()
 ```
 
 3. **单个数据集分析**
 ```python
-from main import visualization_experiment
+from experiments import visualization_experiment
 # 运行可视化实验
 visualization_experiment('Muraro')
 ```
@@ -77,21 +77,21 @@ visualization_experiment('Muraro')
 
 #### 超参数优化
 ```python
-from main import opt_ab2_model
+from experiments import opt_ab2_model
 # 对多个数据集进行参数优化
 opt_ab2_model()
 ```
 
 #### 消融实验
 ```python
-from main import ablation_experiment
+from experiments import ablation_experiment
 # 运行消融实验
 ablation_experiment(2)  # 运行第2号消融实验
 ```
 
 #### 单数据集优化
 ```python
-from main import opt_ab2_single
+from experiments import opt_ab2_single
 # 对单个数据集进行优化
 best_params, results = opt_ab2_single('Muraro', n_trials=50)
 ```
@@ -100,25 +100,33 @@ best_params, results = opt_ab2_single('Muraro', n_trials=50)
 
 ```
 scLGAE/
-├── main.py                    # 主程序入口
-├── config.py                  # 配置文件
-├── model.py                   # GAE模型定义
-├── newtrain.py               # 训练和LRR模块
-├── data.py                   # 数据预处理
-├── clustering.py             # 聚类算法
-├── utils.py                  # 工具函数
-├── visualize.py              # 可视化模块
-├── optimization_new.py       # 超参数优化
-├── multiview.py              # 多视图学习
-├── SNF.py                    # 相似性网络融合
-├── GAEval.py                 # GAE评估模块
-├── FusionWeight.py           # 融合权重计算
-├── symmetricNMF.py           # 对称非负矩阵分解
-├── preprocessed_data/        # 预处理数据存储
-├── results/                  # 实验结果
-├── figures/                  # 可视化图表
-├── useful_results/           # 重要实验结果
-└── ab2_optimization_results/ # 优化结果
+├── README.md                      # 项目文档
+├── requirements.txt               # 依赖包列表
+│
+├── core/                          # 核心模块
+│   ├── experiments.py             # 实验函数入口
+│   ├── config.py                  # 配置文件
+│   ├── gae_model.py              # GAE模型定义
+│   ├── lrr_training.py           # 训练和LRR模块
+│   ├── data_preprocessing.py      # 数据预处理
+│   ├── clustering.py             # 聚类算法
+│   ├── utilities.py              # 工具函数
+│   └── visualization.py          # 可视化模块
+│
+├── supplementary/                 # 辅助模块
+│   ├── optimization_new.py       # 超参数优化
+│   ├── multiview.py              # 多视图学习
+│   ├── SNF.py                    # 相似性网络融合
+│   ├── GAEval.py                 # GAE评估模块
+│   ├── symmetricNMF.py           # 对称非负矩阵分解
+│   ├── test_optimization_new.py  # 优化测试
+│   ├── optimzation.py            # 旧版本优化
+│   └── clustering_results.csv    # 聚类结果数据
+│
+├── docs/                          # 文档
+│   └── scLGAE.pdf               # 项目详细文档
+│
+└── .git/                          # Git版本控制
 ```
 
 ## 支持的数据集
